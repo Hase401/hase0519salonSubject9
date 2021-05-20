@@ -8,13 +8,19 @@
 import UIKit
 
 class ViewController: UIViewController {
-    private let appDelegate = UIApplication.shared.delegate as! AppDelegate
-    
-    @IBOutlet private weak var prefectureLabel: UILabel!
     @IBOutlet private weak var selectedPrefectureLabel: UILabel!
     
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        selectedPrefectureLabel.text = appDelegate.prefectureName
+    @IBAction func didTapSelectButton(_ sender: Any) {
+        let prefecturePicker = ModalViewController.instantiate(
+            didSelectPrefecture: { [weak self] name in
+                self?.selectedPrefectureLabel.text = name
+            }
+        )
+
+        let navigationController = UINavigationController(
+            rootViewController: prefecturePicker
+        )
+
+        present(navigationController, animated: true)
     }
 }
