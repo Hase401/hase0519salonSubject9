@@ -8,31 +8,23 @@
 import UIKit
 
 class ModalViewController: UIViewController {
-    private let appDelegate = UIApplication.shared.delegate as! AppDelegate
     private enum Kantou {
         static let tokyo = "東京都"
         static let kanagawa = "神奈川県"
         static let saitama = "埼玉県"
         static let chiba = "千葉県"
     }
+
+    static func instantiate(didSelectPrefecture: @escaping (String) -> Void) -> ModalViewController {
+        let viewController = UIStoryboard(name: "Main", bundle: nil)
+            .instantiateViewController(identifier: "ModalViewController")
+            as! ModalViewController
+        viewController.didSelectPrefectureHandler = didSelectPrefecture
+        return viewController
+    }
+
+    private var didSelectPrefectureHandler: (String) -> Void = { _ in }
     
-    override func viewWillAppear(_ animated: Bool) {
-        presentingViewController?.beginAppearanceTransition(false, animated: animated)
-        super.viewWillAppear(animated)
-    }
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        presentingViewController?.endAppearanceTransition()
-    }
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-        presentingViewController?.beginAppearanceTransition(true, animated: animated)
-        presentingViewController?.endAppearanceTransition()
-    }
-    
-    @IBAction private func showModalButton(_ sender: UIButton) {
-        dismiss(animated: true, completion: nil)
-    }
     @IBAction private func selectTokyoButton(_ sender: UIButton) {
         selectPerfecture(Kantou.tokyo)
     }
@@ -45,9 +37,13 @@ class ModalViewController: UIViewController {
     @IBAction private func selectChibaButton(_ sender: UIButton) {
         selectPerfecture(Kantou.chiba)
     }
-    
+
+    @IBAction func didTapCancelButton(_ sender: Any) {
+        dismiss(animated: true, completion: nil)
+    }
+
     private func selectPerfecture(_ name: String) {
-        appDelegate.prefectureName = String(name)
+        didSelectPrefectureHandler(name)
         dismiss(animated: true, completion: nil)
     }
 }
