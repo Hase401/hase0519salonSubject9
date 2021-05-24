@@ -25,6 +25,12 @@ class ModalViewController: UIViewController {
 
     private var didSelectPrefectureHandler: (String) -> Void = { _ in }
     
+        // 遊び
+//    override func viewDidLoad() {
+//        super.viewDidLoad()
+//        print(didSelectPrefectureHandler)　//(Function)
+//    }
+    
     @IBAction private func selectTokyoButton(_ sender: UIButton) {
         selectPerfecture(Kantou.tokyo)
     }
